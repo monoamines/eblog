@@ -20,14 +20,13 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import com.teacherwl.eblog.controller.BaseController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -78,9 +77,16 @@ public class MUserController extends BaseController {
     public String mess()
     {
         System.out.println("hello bitch");
-     IPage page=  mUserMessageService.paging(getPage(),new QueryWrapper<MUserMessage>().eq("to_user_id",getProfileId()));
+     IPage<UserMessageVo> page=  mUserMessageService.paging(getPage(),new QueryWrapper<MUserMessage>().eq("to_user_id",getProfileId()));
        httpServletRequest.setAttribute("pageData",page);
+            List<UserMessageVo> mess=   page.getRecords();
+        List<Long> ids = mess.stream().filter((messageVo) -> messageVo.getStatus() == 0).map(UserMessageVo::getId).collect(Collectors.toList());
+
+        //批量修改成已读
+        mUserMessageService.updateToReaded(ids);
+       //将消息改为已读
         return "/user/mess";
+
     }
 
     @PostMapping("/user/set")

@@ -1,8 +1,8 @@
 package com.teacherwl.eblog.controller;
+
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.teacherwl.eblog.common.Result;
 import com.teacherwl.eblog.entity.*;
@@ -10,9 +10,7 @@ import com.teacherwl.eblog.service.*;
 import com.teacherwl.eblog.util.ValidationUtil;
 import com.teacherwl.eblog.vo.MCommentVo;
 import com.teacherwl.eblog.vo.PostVo;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +31,9 @@ public class PostController extends  BaseController {
     MPostService mPostService;
     @Autowired
     MUserService mUserService;
+
+    @Autowired
+    WsService wsService;
 
     @Autowired
     MCategoryService mCategoryService;
@@ -209,7 +210,7 @@ public class PostController extends  BaseController {
         mPostService.updateById(post);
         //本周热评加一
         mPostService.incrCommentCountAndUnionForWeekRank(post.getId(),true);
-        //通知作者 有人评论了你的文章 判断是否是自己评论了自己文章
+        //通知作者 有人评论了你的文章 判断是否是自己评论了自己文章(不需要通知)
         if(!post.getId().equals(getProfileId())) {
             MUserMessage mUserMessage = new MUserMessage();
             mUserMessage.setPostId(jid);
@@ -221,6 +222,8 @@ public class PostController extends  BaseController {
             mUserMessage.setCreated(new Date());
             mUserMessage.setStatus(0);//未读消息
             mUserMessageService.save(mUserMessage);
+            wsService.sendMessCountToUser(mUserMessage.getToUserId());
+
         }
 
         //通知被at的人，有人at了你

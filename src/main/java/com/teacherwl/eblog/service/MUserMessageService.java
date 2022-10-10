@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.teacherwl.eblog.entity.MUserMessage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -17,4 +19,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MUserMessageService extends IService<MUserMessage> {
 
     IPage paging(Page page, QueryWrapper<MUserMessage> to_user_id);
+
+    void updateToReaded(List<Long> ids);
 }
