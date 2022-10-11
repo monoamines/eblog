@@ -5,7 +5,6 @@ import com.teacherwl.eblog.service.MCommentService;
 import com.teacherwl.eblog.service.MPostService;
 import com.teacherwl.eblog.service.MUserMessageService;
 import com.teacherwl.eblog.shiro.AccountProfile;
-import com.teacherwl.eblog.shiro.AccountRealm;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class BaseController {
     protected Page getPage()
     {
         int pn= ServletRequestUtils.getIntParameter(httpServletRequest,"pn",1);
-        int size= ServletRequestUtils.getIntParameter(httpServletRequest,"size",1);
+        int size= ServletRequestUtils.getIntParameter(httpServletRequest,"size",3);
         Page pages=new Page(pn,size);
         return  pages;
     }

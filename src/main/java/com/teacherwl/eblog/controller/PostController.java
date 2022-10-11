@@ -54,12 +54,15 @@ public class PostController extends  BaseController {
     }
 
 
-    @GetMapping("/post/{id:\\d*}")//将接收的参数指定为数字类型
-    public String detail(@PathVariable( name = "id") Long id)
+    @GetMapping("/post/{id}")//将接收的参数指定为数字类型
+    public String detail(@PathVariable( name = "id") String id)
     {
         httpServletRequest.setAttribute("currentCategoryId",0);
+        String id2=id.replace(",","");
 
-     PostVo postVo=   mPostService.selectOnePost(new QueryWrapper<MPost>().eq("p.id",id) );//这里注意 Id不知道是谁的ID，需要声明
+        long l = Long.parseLong(id2);
+
+        PostVo postVo=   mPostService.selectOnePost(new QueryWrapper<MPost>().eq("p.id",id2) );//这里注意 Id不知道是谁的ID，需要声明
         //分页、文章ID、用户ID、排序
        IPage<MCommentVo> commentResults= mCommentService.paging(getPage(),postVo.getId(),null,"created");
         httpServletRequest.setAttribute("onePost",postVo);
