@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.teacherwl.eblog.service.MCommentService;
 import com.teacherwl.eblog.service.MPostService;
 import com.teacherwl.eblog.service.MUserMessageService;
+import com.teacherwl.eblog.service.SearchService;
 import com.teacherwl.eblog.shiro.AccountProfile;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class BaseController {
     HttpServletRequest httpServletRequest;
     @Autowired
     MPostService mPostService;
+
+    @Autowired
+    SearchService searchService;
 
     @Autowired
     MUserMessageService mUserMessageService;

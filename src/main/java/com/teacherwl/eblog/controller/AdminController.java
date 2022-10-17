@@ -1,13 +1,15 @@
 package com.teacherwl.eblog.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.teacherwl.eblog.common.Result;
 import com.teacherwl.eblog.entity.MPost;
+import com.teacherwl.eblog.vo.PostVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,5 +43,29 @@ public class AdminController extends BaseController{
         mPostService.updateById(post);
         return Result.success();
     }
+    @ResponseBody
+    @RequestMapping("initEsData")
+    public Result initEsData()
+    {
+        int size=1000;
+        Page page=new Page();
+        page.setSize(size);
+        int total=0;
+        for (int i = 0; i < 1000; i++) {
+                page.setCurrent(1);
+            IPage<PostVo> paging = mPostService.paging(page, null, null, null, null, "created");
+       int nums= searchService.initEsData(paging.getRecords());
+       total+=nums;
+
+        //当查询一页数据小于size时 直接返回
+        if(paging.getRecords().size()<size)
+        {
+            break;
+        }
+        }
+    return Result.success("总共有"+total+"条数据",null);
+
+    }
+
 
 }

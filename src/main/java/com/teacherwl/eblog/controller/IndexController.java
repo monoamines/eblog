@@ -1,18 +1,20 @@
 package com.teacherwl.eblog.controller;
 
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.teacherwl.eblog.search.model.PostDocument;
+import com.teacherwl.eblog.service.SearchService;
 import com.teacherwl.eblog.vo.PostVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class IndexController extends  BaseController {
 
+    @Autowired
+    SearchService searchService;
 @RequestMapping({"","/","index"})
     public String index()
     {
@@ -32,4 +34,14 @@ public class IndexController extends  BaseController {
     {
         return "index";
     }
+
+    @RequestMapping("/search")
+    public  String search(String q)
+    {
+        httpServletRequest.setAttribute("q",q);
+      IPage<PostDocument> page= searchService.search(getPage(),q);
+      httpServletRequest.setAttribute("pageData",page);
+        return "search";
+    }
+
 }
