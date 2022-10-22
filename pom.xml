@@ -85,7 +85,11 @@
             <artifactId>hutool-all</artifactId>
             <version>5.5.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.t-io</groupId>
+            <artifactId>tio-websocket-server</artifactId>
+            <version>3.2.5.v20190101-RELEASE</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>

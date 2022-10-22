@@ -13,6 +13,7 @@ public class Consts {
 
     public static final Long IM_DEFAULT_USER_ID = 999L;
 
+
     public final static Long IM_GROUP_ID = 999L;
     public final static String IM_GROUP_NAME = "e-group-study";
 
